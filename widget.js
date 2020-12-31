@@ -17,6 +17,12 @@ init();
 async function init() {
   if (CONFIG.debug) console.log('init called');
   const widget = await createWidget();
+  
+  // Add background color
+  if(Device.isUsingDarkAppearance()){
+    widget.backgroundColor = new Color("1c1c1e")
+  }
+  
   if (!config.runsInWidget) await widget.presentSmall();
 
   Script.setWidget(widget);
