@@ -7,7 +7,7 @@ const getApiUrl = (location, state) => {
 }
 
 const defaultCfg = {
-  layout: 'simple'
+  layout: 'extended'
 };
 
 const CONFIG = Object.assign({}, defaultCfg, arguments[0]);
@@ -19,7 +19,7 @@ async function init() {
   const widget = await createWidget();
   
   // Add background color
-  if(Device.isUsingDarkAppearance()){
+  if (Device.isUsingDarkAppearance()) {
     widget.backgroundColor = new Color("1c1c1e")
   }
   
@@ -43,8 +43,8 @@ async function createWidget(items) {
   const header = newStack(list, 4);
 
   let iconColor = Color.black();
-  if(Device.isUsingDarkAppearance()) iconColor = Color.white();
-  addIcon('stethoscope', header, 13, iconColor);
+  /*if(Device.isUsingDarkAppearance())*/ iconColor = Color.white();
+  addIcon('bed.double', header, 13, iconColor);
 
   const headerText = header.addText('Freie ITS-Betten');
   headerText.font = Font.mediumSystemFont(12);
@@ -85,16 +85,16 @@ async function createWidget(items) {
     if (CONFIG.debug) console.log('render updated block');
 
     list.addSpacer(6);
-    const dateFormatter = new DateFormatter();
-    dateFormatter.useShortDateStyle();
-    dateFormatter.useShortTimeStyle();
-
-    const updatedLabel = list.addText(`↻ ${dateFormatter.string(new Date(data.overall.updated))}`);
-    updatedLabel.font = Font.regularSystemFont(9);
-    updatedLabel.textColor = Color.gray();
+    
+    const date = new Date(data.overall.updated);
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const updatedLabel = list.addText(`Update: ${date.toLocaleDateString('de-DE', options)}`);
+    updatedLabel.font = Font.regularSystemFont(8);
+    updatedLabel.textOpacity = 0.8;
+    updatedLabel.centerAlignText();
   } else {
     list.addSpacer();
-    list.addText("Daten nicht verfügbar");
+    list.addText("Keine Daten");
   }
 
   return list;
@@ -130,8 +130,8 @@ function renderDatablock(list, data, weekData) {
     if (CONFIG.debug) console.log('render extended datablock');
 
     const location = bedsLabel.addText((data.shortName || 'DE'));
-    location.font = Font.semiboldSystemFont(10);
-    // location.textColor = Color.lightGray();
+    location.font = Font.lightSystemFont(12);
+    location.textColor = Color.gray();
 
     if (CONFIG.debug) console.log('absolute numbers');
 
@@ -154,6 +154,7 @@ function renderDatablock(list, data, weekData) {
 
     const location = bedsLabel.addText(data.name || 'Deutschland');
     location.font = Font.lightSystemFont(12);
+    location.textColor = Color.gray();
   }
 
   if (CONFIG.debug) console.log('render datablock complete');
