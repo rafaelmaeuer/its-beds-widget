@@ -20,7 +20,7 @@ async function init() {
   
   // Add background color
   if (Device.isUsingDarkAppearance()) {
-    widget.backgroundColor = new Color("1c1c1e")
+    widget.backgroundColor = new Color("1c1c1e");
   }
   
   if (!config.runsInWidget) await widget.presentSmall();
@@ -176,8 +176,9 @@ async function getData() {
     if (args.widgetParameter) {
       foundData = await new Request(getApiUrl(null, args.widgetParameter)).loadJSON();
     } else {
-      const location = await getLocation();
-      foundData = await new Request(getApiUrl(location)).loadJSON();
+      //const location = await getLocation();
+      //foundData = await new Request(getApiUrl(location)).loadJSON();
+      foundData = await new Request(getApiUrl(null, "HE")).loadJSON();
     }
 
     return foundData;
